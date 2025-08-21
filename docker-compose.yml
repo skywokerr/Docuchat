@@ -1,27 +1,25 @@
-version: '3.8'
 services:
   backend:
     build: ./backend
     ports:
-      - "8000:8000" # Maps your local machine's port 8000 to the container's port 8000
+      - "8000:8000"
     env_file:
-      - ./backend/.env # Load the environment variables from this file
+      - ./backend/.env
     volumes:
-      - ./backend/app:/app/app # Hot-reload: changes to your code automatically update in the container
-      - chroma_data:/app/chroma_db # Persist the vector database data
+      - ./backend/app:/app/app
+      - chroma_data:/app/chroma_db
 
   frontend:
     build: ./frontend
     ports:
-      - "3000:3000" # Maps your local machine's port 3000 to the container's port 3000
+      - "3000:3000"
     volumes:
-      - ./frontend:/app # Hot-reload for the frontend
+      - ./frontend:/app
       - /app/node_modules
     depends_on:
-      - backend # Ensures the backend starts before the frontend
-    stdin_open: true # Needed for Next.js dev server
-    tty: true        # Needed for Next.js dev server
+      - backend
+    stdin_open: true
+    tty: true
 
-# Define a volume to persist the ChromaDB data even if the container is stopped
 volumes:
   chroma_data:
